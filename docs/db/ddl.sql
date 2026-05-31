@@ -1,5 +1,5 @@
 -- =============================================
--- 쿵합 (KungAhp) DDL
+-- 쿵합 (KhungHap) DDL
 -- PostgreSQL
 -- =============================================
 
@@ -10,7 +10,7 @@
 CREATE TABLE "user" (
                         id              BIGSERIAL   PRIMARY KEY,
                         email           VARCHAR(100) NOT NULL UNIQUE,
-                        password        VARCHAR(100) NOT NULL
+                        password        VARCHAR(100) NOT NULL,
                         name            VARCHAR(50)  NOT NULL,
                         nickname        VARCHAR(50)  NOT NULL,
                         phone           VARCHAR(20)  NOT NULL,
@@ -70,7 +70,8 @@ CREATE TABLE user_dating_style (
                                    age_min         SMALLINT,
                                    age_max         SMALLINT,
                                    height_min      SMALLINT,
-                                   height_max      SMALLINT
+                                   height_max      SMALLINT,
+                                   same_college_excluded  BOOLEAN
 );
 
 -- =============================================
@@ -126,13 +127,33 @@ CREATE TABLE chat_message (
 -- CHOICE_REPORT  (150번 후 정보 공개 요청)
 -- =============================================
 CREATE TABLE choice_report (
-                               id              BIGSERIAL   PRIMARY KEY,
-                               room_id         BIGINT      NOT NULL UNIQUE REFERENCES chat_room(id) ON DELETE CASCADE,
-                               requester_id    BIGINT      NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
-                               status          VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING / YES / NO / EXPIRED
-                               last_message    TEXT,
-                               requested_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                               responded_at    TIMESTAMPTZ
+                               id            BIGSERIAL PRIMARY KEY,
+
+    -- 채팅방당 1개만 생성되도록 UNIQUE 보장
+                               room_id       BIGINT NOT NULL UNIQUE REFERENCES chat_room(id) ON DELETE CASCADE,
+
+    -- chat_room.user_a_id / user_b_id 와 1:1 대응
+    -- NULL : 아직 미응답 / YES : 공개 동의 / NO : 공개 거부
+                               user_a_choice VARCHAR(10) CHECK (user_a_choice IN ('YES', 'NO')),
+                               user_b_choice VARCHAR(10) CHECK (user_b_choice IN ('YES', 'NO')),
+
+    -- WAITING  : 한 명 이상 아직 미응답
+    -- REVEALED : 둘 다 YES → 실명/전화번호 공개
+    -- REJECTED : 한 명이라도 NO 또는 24시간 만료
+                               result        VARCHAR(20) NOT NULL DEFAULT 'WAITING'
+                                   CHECK (result IN ('WAITING', 'REVEALED', 'REJECTED')),
+
+    -- 채팅방이 막힐 때 각자 상대방에게 남기는 마지막 메시지
+                               user_a_last_message  TEXT,
+                               user_b_last_message  TEXT,
+
+                               created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    -- 생성 시점 기준 24시간 후 자동 만료 (스케줄러가 이 값 기준으로 REJECTED 처리)
+                               expires_at    TIMESTAMPTZ NOT NULL DEFAULT NOW() + INTERVAL '24 hours',
+
+    -- REVEALED / REJECTED 확정 시각, WAITING 동안은 NULL
+                               resolved_at   TIMESTAMPTZ
 );
 
 -- =============================================
