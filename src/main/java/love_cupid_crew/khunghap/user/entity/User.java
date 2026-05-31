@@ -2,6 +2,7 @@ package love_cupid_crew.khunghap.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import love_cupid_crew.khunghap.ilju.entity.IljuAnimal;
 import love_cupid_crew.khunghap.user.enums.Gender;
 
 import java.time.LocalDate;
@@ -47,11 +48,9 @@ public class User {
     @Column(length = 100)
     private String college;
 
-    @Column(length = 30)
-    private String iljuAnimal;
-
-    @Column(length = 10)
-    private String iljuOheng;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ilju_animal_id", nullable = false)
+    private IljuAnimal iljuAnimal;
 
     @Builder.Default
     @Column(nullable = false)

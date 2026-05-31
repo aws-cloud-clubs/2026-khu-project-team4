@@ -34,8 +34,7 @@ CREATE TABLE "user" (
                         birth_hour      VARCHAR(20),                        -- 오시, 자시 등 (모를 수도 있음)
                         gender          VARCHAR(10)  NOT NULL,              -- MALE / FEMALE
                         college         VARCHAR(100) NOT NULL,
-                        ilju_animal     VARCHAR(30)  NOT NULL,              -- e.g. 붉은 쥐
-                        ilju_oheng      VARCHAR(10)  NOT NULL,              -- 목/화/토/금/수
+                        ilju_animal_id  INT          NOT NULL REFERENCES ilju_animal(id),
                         is_active       BOOLEAN      NOT NULL DEFAULT TRUE, -- 매칭 활성화 여부
                         created_at      TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
