@@ -5,6 +5,22 @@
 
 
 -- =============================================
+-- ILJU_ANIMAL  (일주동물 레퍼런스)
+-- =============================================
+CREATE TABLE ilju_animal (
+                             id          SERIAL      PRIMARY KEY,
+                             name        VARCHAR(30) NOT NULL UNIQUE,
+                             emoji       VARCHAR(10) NOT NULL,
+                             cheongan    VARCHAR(5)  NOT NULL,
+                             jiji        VARCHAR(5)  NOT NULL,
+                             oheng       VARCHAR(5)  NOT NULL,
+                             description TEXT,
+                             personality TEXT[],
+                             strengths   TEXT[],
+                             weaknesses  TEXT[]
+);
+
+-- =============================================
 -- USER
 -- =============================================
 CREATE TABLE "user" (
