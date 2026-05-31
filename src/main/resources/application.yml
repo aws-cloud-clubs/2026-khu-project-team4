@@ -20,6 +20,7 @@ spring:
     properties:
       hibernate:
         format_sql: true         # SQL을 보기 좋게 줄바꿈 (한 줄 쿼리 → 포맷팅)
+    show-sql: true
 
 
 jwt:
