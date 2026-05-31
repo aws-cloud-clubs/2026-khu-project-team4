@@ -3,7 +3,6 @@ package love_cupid_crew.khunghap.chat.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import love_cupid_crew.khunghap.chat.enums.ChoiceReportStatus;
-import love_cupid_crew.khunghap.user.entity.User;
 
 import java.time.OffsetDateTime;
 
@@ -23,26 +22,35 @@ public class ChoiceReport {
     @JoinColumn(name = "room_id", nullable = false, unique = true)
     private ChatRoom room;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id", nullable = false)
-    private User requester;
+    @Column(name = "user_a_choice", length = 10)
+    private String userAChoice;
+
+    @Column(name = "user_b_choice", length = 10)
+    private String userBChoice;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private ChoiceReportStatus status = ChoiceReportStatus.PENDING;
+    private ChoiceReportStatus result = ChoiceReportStatus.WAITING;
 
-    @Column(columnDefinition = "TEXT")
-    private String lastMessage;
+    @Column(name = "user_a_last_message", columnDefinition = "TEXT")
+    private String userALastMessage;
+
+    @Column(name = "user_b_last_message", columnDefinition = "TEXT")
+    private String userBLastMessage;
 
     @Column(nullable = false, updatable = false)
-    private OffsetDateTime requestedAt;
+    private OffsetDateTime createdAt;
+
+    @Column(nullable = false)
+    private OffsetDateTime expiresAt;
 
     @Column
-    private OffsetDateTime respondedAt;
+    private OffsetDateTime resolvedAt;
 
     @PrePersist
-    protected void onRequest() {
-        requestedAt = OffsetDateTime.now();
+    protected void onCreate() {
+        createdAt = OffsetDateTime.now();
+        expiresAt = createdAt.plusHours(24);
     }
 }
