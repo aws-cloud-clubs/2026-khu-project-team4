@@ -5,6 +5,22 @@
 
 
 -- =============================================
+-- ILJU_ANIMAL  (일주동물 레퍼런스)
+-- =============================================
+CREATE TABLE ilju_animal (
+                             id          SERIAL      PRIMARY KEY,
+                             name        VARCHAR(30) NOT NULL UNIQUE,
+                             emoji       VARCHAR(10) NOT NULL,
+                             cheongan    VARCHAR(5)  NOT NULL,
+                             jiji        VARCHAR(5)  NOT NULL,
+                             oheng       VARCHAR(5)  NOT NULL,
+                             description TEXT,
+                             personality TEXT[],
+                             strengths   TEXT[],
+                             weaknesses  TEXT[]
+);
+
+-- =============================================
 -- USER
 -- =============================================
 CREATE TABLE "user" (
@@ -18,8 +34,7 @@ CREATE TABLE "user" (
                         birth_hour      VARCHAR(20),                        -- 오시, 자시 등 (모를 수도 있음)
                         gender          VARCHAR(10)  NOT NULL,              -- MALE / FEMALE
                         college         VARCHAR(100) NOT NULL,
-                        ilju_animal     VARCHAR(30)  NOT NULL,              -- e.g. 붉은 쥐
-                        ilju_oheng      VARCHAR(10)  NOT NULL,              -- 목/화/토/금/수
+                        ilju_animal_id  INT          NOT NULL REFERENCES ilju_animal(id),
                         is_active       BOOLEAN      NOT NULL DEFAULT TRUE, -- 매칭 활성화 여부
                         created_at      TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
