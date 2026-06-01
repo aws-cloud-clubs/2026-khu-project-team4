@@ -17,7 +17,8 @@ CREATE TABLE ilju_animal (
                              description TEXT,
                              personality TEXT[],
                              strengths   TEXT[],
-                             weaknesses  TEXT[]
+                             weaknesses  TEXT[],
+                             image_url   TEXT
 );
 
 -- =============================================
@@ -31,7 +32,7 @@ CREATE TABLE "user" (
                         nickname        VARCHAR(50)  NOT NULL,
                         phone           VARCHAR(20)  NOT NULL,
                         birth_date      DATE         NOT NULL,
-                        birth_hour      VARCHAR(20),                        -- 오시, 자시 등 (모를 수도 있음)
+                        birth_hour      VARCHAR(10),                        -- 자시 / 축시 / 인시 / 묘시 / 진시 / 사시 / 오시 / 미시 / 신시 / 유시 / 술시 / 해시 / 모름
                         gender          VARCHAR(10)  NOT NULL,              -- MALE / FEMALE
                         college         VARCHAR(100) NOT NULL,
                         ilju_animal_id  INT          NOT NULL REFERENCES ilju_animal(id),
@@ -148,9 +149,9 @@ CREATE TABLE choice_report (
                                room_id       BIGINT NOT NULL UNIQUE REFERENCES chat_room(id) ON DELETE CASCADE,
 
     -- chat_room.user_a_id / user_b_id 와 1:1 대응
-    -- NULL : 아직 미응답 / YES : 공개 동의 / NO : 공개 거부
-                               user_a_choice VARCHAR(10) CHECK (user_a_choice IN ('YES', 'NO')),
-                               user_b_choice VARCHAR(10) CHECK (user_b_choice IN ('YES', 'NO')),
+    -- WAITING : 미응답 / YES : 공개 동의 / NO : 공개 거부
+                               user_a_choice VARCHAR(10) NOT NULL DEFAULT 'WAITING' CHECK (user_a_choice IN ('WAITING', 'YES', 'NO')),
+                               user_b_choice VARCHAR(10) NOT NULL DEFAULT 'WAITING' CHECK (user_b_choice IN ('WAITING', 'YES', 'NO')),
 
     -- WAITING  : 한 명 이상 아직 미응답
     -- REVEALED : 둘 다 YES → 실명/전화번호 공개

@@ -3,6 +3,7 @@ package love_cupid_crew.khunghap.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import love_cupid_crew.khunghap.ilju.entity.IljuAnimal;
+import love_cupid_crew.khunghap.user.enums.BirthHour;
 import love_cupid_crew.khunghap.user.enums.Gender;
 
 import java.time.LocalDate;
@@ -38,8 +39,9 @@ public class User {
     @Column
     private LocalDate birthDate;
 
-    @Column(length = 20)
-    private String birthHour;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private BirthHour birthHour;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
