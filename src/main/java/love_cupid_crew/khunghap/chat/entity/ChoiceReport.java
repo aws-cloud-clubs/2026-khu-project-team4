@@ -3,6 +3,7 @@ package love_cupid_crew.khunghap.chat.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import love_cupid_crew.khunghap.chat.enums.ChoiceReportStatus;
+import love_cupid_crew.khunghap.chat.enums.UserChoice;
 
 import java.time.OffsetDateTime;
 
@@ -22,11 +23,15 @@ public class ChoiceReport {
     @JoinColumn(name = "room_id", nullable = false, unique = true)
     private ChatRoom room;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_a_choice", length = 10)
-    private String userAChoice;
+    private UserChoice userAChoice = UserChoice.WAITING;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_b_choice", length = 10)
-    private String userBChoice;
+    private UserChoice userBChoice = UserChoice.WAITING;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
