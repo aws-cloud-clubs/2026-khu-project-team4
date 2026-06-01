@@ -41,4 +41,7 @@ public class IljuAnimal {
 
     @Column(columnDefinition = "TEXT[]")
     private String[] weaknesses;
+
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
 }
