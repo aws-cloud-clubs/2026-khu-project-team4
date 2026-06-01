@@ -21,7 +21,8 @@
       "변덕스러움",
       "끈기 부족",
       "우유부단"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 쥐.png"
   },
   {
     "name": "푸른 소",
@@ -45,7 +46,8 @@
       "고집스러움",
       "변화에 느린 적응",
       "융통성 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 소.png"
   },
   {
     "name": "붉은 호랑이",
@@ -69,7 +71,8 @@
       "급한 성격",
       "독단적 성향",
       "감정 기복"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 호랑이.png"
   },
   {
     "name": "붉은 토끼",
@@ -93,7 +96,8 @@
       "예민함",
       "소심함",
       "우유부단"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 토끼.png"
   },
   {
     "name": "황금 용",
@@ -117,7 +121,8 @@
       "완고함",
       "과도한 자존심",
       "보수적 성향"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 용.png"
   },
   {
     "name": "황금 뱀",
@@ -141,7 +146,8 @@
       "의심 많음",
       "집착",
       "냉소적 성향"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 뱀.png"
   },
   {
     "name": "흰 말",
@@ -165,7 +171,8 @@
       "충동적",
       "고집",
       "인내심 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 말.png"
   },
   {
     "name": "흰 양",
@@ -189,7 +196,8 @@
       "소심함",
       "걱정 많음",
       "결단력 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 양.png"
   },
   {
     "name": "검은 원숭이",
@@ -213,7 +221,8 @@
       "변덕",
       "경솔함",
       "집중력 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 원숭이.png"
   },
   {
     "name": "검은 닭",
@@ -237,7 +246,8 @@
       "완벽주의로 인한 스트레스",
       "비판적",
       "융통성 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 닭.png"
   },
   {
     "name": "푸른 개",
@@ -261,7 +271,8 @@
       "고집",
       "융통성 부족",
       "과도한 정의감"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 개.png"
   },
   {
     "name": "푸른 돼지",
@@ -285,7 +296,8 @@
       "나태함",
       "무계획적",
       "현실 도피적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 돼지.png"
   },
   {
     "name": "붉은 쥐",
@@ -309,7 +321,8 @@
       "감정 기복",
       "충동적",
       "자기 과신"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 쥐.png"
   },
   {
     "name": "붉은 소",
@@ -333,7 +346,8 @@
       "고집",
       "내향적 성향으로 오해 받음",
       "소극적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 소.png"
   },
   {
     "name": "황금 호랑이",
@@ -357,7 +371,8 @@
       "완고함",
       "고집",
       "변화 거부"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 호랑이.png"
   },
   {
     "name": "황금 토끼",
@@ -381,7 +396,8 @@
       "소심함",
       "우유부단",
       "상처받기 쉬움"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 토끼.png"
   },
   {
     "name": "흰 용",
@@ -405,7 +421,8 @@
       "독단적",
       "거친 표현",
       "감정 표현 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 용.png"
   },
   {
     "name": "흰 뱀",
@@ -429,7 +446,8 @@
       "냉소적",
       "의심",
       "폐쇄적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 뱀.png"
   },
   {
     "name": "검은 말",
@@ -453,7 +471,8 @@
       "변덕",
       "끈기 부족",
       "산만함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 말.png"
   },
   {
     "name": "검은 양",
@@ -477,7 +496,8 @@
       "우유부단",
       "걱정 많음",
       "소심함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 양.png"
   },
   {
     "name": "푸른 원숭이",
@@ -501,7 +521,8 @@
       "경솔함",
       "인내심 부족",
       "독단적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 원숭이.png"
   },
   {
     "name": "푸른 닭",
@@ -525,7 +546,8 @@
       "예민함",
       "완벽주의 스트레스",
       "비판적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 닭.png"
   },
   {
     "name": "붉은 개",
@@ -549,7 +571,8 @@
       "고집",
       "감정적",
       "융통성 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 개.png"
   },
   {
     "name": "붉은 돼지",
@@ -573,7 +596,8 @@
       "나태함",
       "과식 등 탐닉 성향",
       "우유부단"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 돼지.png"
   },
   {
     "name": "황금 쥐",
@@ -597,7 +621,8 @@
       "느린 행동",
       "보수적",
       "변화 거부"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 쥐.png"
   },
   {
     "name": "황금 소",
@@ -621,7 +646,8 @@
       "고집",
       "완고함",
       "새로운 것에 대한 거부감"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 소.png"
   },
   {
     "name": "흰 호랑이",
@@ -645,7 +671,8 @@
       "독단적",
       "고집",
       "타협 어려움"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 호랑이.png"
   },
   {
     "name": "흰 토끼",
@@ -669,7 +696,8 @@
       "예민함",
       "소심함",
       "완벽주의"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 토끼.png"
   },
   {
     "name": "검은 용",
@@ -693,7 +721,8 @@
       "비현실적 이상",
       "산만함",
       "일관성 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 용.png"
   },
   {
     "name": "검은 뱀",
@@ -717,7 +746,8 @@
       "폐쇄적",
       "의심",
       "감정 표현 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 뱀.png"
   },
   {
     "name": "푸른 말",
@@ -741,7 +771,8 @@
       "급한 성격",
       "충동적",
       "인내심 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 말.png"
   },
   {
     "name": "푸른 양",
@@ -765,7 +796,8 @@
       "우유부단",
       "소심함",
       "결단력 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 양.png"
   },
   {
     "name": "붉은 원숭이",
@@ -789,7 +821,8 @@
       "경솔함",
       "주의 산만",
       "깊이 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 원숭이.png"
   },
   {
     "name": "붉은 닭",
@@ -813,7 +846,8 @@
       "예민함",
       "비판적",
       "완벽주의 스트레스"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 닭.png"
   },
   {
     "name": "황금 개",
@@ -837,7 +871,8 @@
       "완고함",
       "변화 거부",
       "고집"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 개.png"
   },
   {
     "name": "황금 돼지",
@@ -861,7 +896,8 @@
       "나태함",
       "게으름",
       "우유부단"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 돼지.png"
   },
   {
     "name": "흰 쥐",
@@ -885,7 +921,8 @@
       "냉정함으로 오해",
       "감정 표현 부족",
       "독단적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 쥐.png"
   },
   {
     "name": "흰 소",
@@ -909,7 +946,8 @@
       "고집",
       "융통성 부족",
       "예민함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 소.png"
   },
   {
     "name": "검은 호랑이",
@@ -933,7 +971,8 @@
       "충동적",
       "무모함",
       "인내심 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 호랑이.png"
   },
   {
     "name": "검은 토끼",
@@ -957,7 +996,8 @@
       "소심함",
       "감정 기복",
       "우유부단"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 토끼.png"
   },
   {
     "name": "푸른 용",
@@ -981,7 +1021,8 @@
       "급한 성격",
       "완고함",
       "독단적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 용.png"
   },
   {
     "name": "푸른 뱀",
@@ -1005,7 +1046,8 @@
       "우유부단",
       "폐쇄적",
       "의심"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 뱀.png"
   },
   {
     "name": "붉은 말",
@@ -1029,7 +1071,8 @@
       "지나친 자신감",
       "감정 기복",
       "독단적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 말.png"
   },
   {
     "name": "붉은 양",
@@ -1053,7 +1096,8 @@
       "우유부단",
       "감정적",
       "소심함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 양.png"
   },
   {
     "name": "황금 원숭이",
@@ -1077,7 +1121,8 @@
       "완고함",
       "변덕",
       "고집"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 원숭이.png"
   },
   {
     "name": "황금 닭",
@@ -1101,7 +1146,8 @@
       "완벽주의",
       "융통성 부족",
       "비판적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 닭.png"
   },
   {
     "name": "흰 개",
@@ -1125,7 +1171,8 @@
       "고집",
       "융통성 부족",
       "거친 표현"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 개.png"
   },
   {
     "name": "흰 돼지",
@@ -1149,7 +1196,8 @@
       "나태함",
       "과욕",
       "예민함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 돼지.png"
   },
   {
     "name": "검은 쥐",
@@ -1173,7 +1221,8 @@
       "변덕",
       "비현실적 이상",
       "감정 기복"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 쥐.png"
   },
   {
     "name": "검은 소",
@@ -1197,7 +1246,8 @@
       "소극적",
       "내향적",
       "표현력 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 소.png"
   },
   {
     "name": "푸른 호랑이",
@@ -1221,7 +1271,8 @@
       "완고함",
       "독단적",
       "타협 어려움"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 호랑이.png"
   },
   {
     "name": "푸른 토끼",
@@ -1245,7 +1296,8 @@
       "소심함",
       "우유부단",
       "상처받기 쉬움"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/푸른 토끼.png"
   },
   {
     "name": "붉은 용",
@@ -1269,7 +1321,8 @@
       "과도한 자신감",
       "독단적",
       "감정 기복"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 용.png"
   },
   {
     "name": "붉은 뱀",
@@ -1293,7 +1346,8 @@
       "집착",
       "폐쇄적",
       "감정 기복"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/붉은 뱀.png"
   },
   {
     "name": "황금 말",
@@ -1317,7 +1371,8 @@
       "완고함",
       "고집",
       "융통성 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 말.png"
   },
   {
     "name": "황금 양",
@@ -1341,7 +1396,8 @@
       "우유부단",
       "결단력 부족",
       "소심함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/황금 양.png"
   },
   {
     "name": "흰 원숭이",
@@ -1365,7 +1421,8 @@
       "냉정함",
       "독단적",
       "타협 어려움"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 원숭이.png"
   },
   {
     "name": "흰 닭",
@@ -1389,7 +1446,8 @@
       "지나친 완벽주의",
       "비판적",
       "예민함"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/흰 닭.png"
   },
   {
     "name": "검은 개",
@@ -1413,7 +1471,8 @@
       "변덕",
       "산만함",
       "깊이 부족"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 개.png"
   },
   {
     "name": "검은 돼지",
@@ -1437,6 +1496,7 @@
       "나태함",
       "감정 기복",
       "현실 도피적"
-    ]
+    ],
+    "imageUrl": "https://khunghap-s3.s3.ap-northeast-2.amazonaws.com/ilju/검은 돼지.png"
   }
 ]

@@ -21,28 +21,25 @@ public class IljuAnimalDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (iljuAnimalRepository.count() > 0) return;
-
         ClassPathResource resource = new ClassPathResource("data/ilju-animals.json");
         List<IljuAnimalDto> dtos = Arrays.asList(
                 objectMapper.readValue(resource.getInputStream(), IljuAnimalDto[].class)
         );
 
-        List<IljuAnimal> animals = dtos.stream()
-                .map(dto -> IljuAnimal.builder()
-                        .name(dto.name())
-                        .emoji(dto.emoji())
-                        .cheongan(dto.cheongan())
-                        .jiji(dto.jiji())
-                        .oheng(dto.oheng())
-                        .description(dto.description())
-                        .personality(dto.personality())
-                        .strengths(dto.strengths())
-                        .weaknesses(dto.weaknesses())
-                        .build())
-                .toList();
+        if (iljuAnimalRepository.count() > 0) return;
 
-        iljuAnimalRepository.saveAll(animals);
+        dtos.forEach(dto -> iljuAnimalRepository.save(IljuAnimal.builder()
+                .name(dto.name())
+                .emoji(dto.emoji())
+                .cheongan(dto.cheongan())
+                .jiji(dto.jiji())
+                .oheng(dto.oheng())
+                .description(dto.description())
+                .personality(dto.personality())
+                .strengths(dto.strengths())
+                .weaknesses(dto.weaknesses())
+                .imageUrl(dto.imageUrl())
+                .build()));
     }
 
     private record IljuAnimalDto(
@@ -54,6 +51,7 @@ public class IljuAnimalDataInitializer implements ApplicationRunner {
             String description,
             String[] personality,
             String[] strengths,
-            String[] weaknesses
+            String[] weaknesses,
+            String imageUrl
     ) {}
 }
