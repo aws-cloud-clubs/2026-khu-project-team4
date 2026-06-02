@@ -2,13 +2,17 @@ package love_cupid_crew.khunghap.chat;
 
 import lombok.RequiredArgsConstructor;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
+import love_cupid_crew.khunghap.chat.dto.MessageLimitReachedEvent;
 import love_cupid_crew.khunghap.chat.dto.MessageListResponse;
+import love_cupid_crew.khunghap.chat.dto.NewMessageEvent;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomSummaryResponse;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomRequest;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomResponse;
 import love_cupid_crew.khunghap.chat.entity.ChatMessage;
 import love_cupid_crew.khunghap.chat.entity.ChatRoom;
 import love_cupid_crew.khunghap.chat.entity.ChoiceReport;
+import love_cupid_crew.khunghap.chat.enums.ChatRoomStatus;
+import love_cupid_crew.khunghap.chat.enums.ChoiceReportStatus;
 import love_cupid_crew.khunghap.chat.enums.UserChoice;
 import org.springframework.data.domain.PageRequest;
 import love_cupid_crew.khunghap.chat.repository.ChatMessageRepository;
@@ -36,6 +40,7 @@ public class ChatService {
     private final CoinBalanceRepository coinBalanceRepository;
     private final UserRepository userRepository;
     private final MatchCandidateRepository matchCandidateRepository;
+    private final RedisPublisher redisPublisher;
 
     public CreateChatRoomResponse createChatRoom(Long currentUserId, CreateChatRoomRequest request) {
         Long targetUserId = request.getTargetUserId();
@@ -193,4 +198,53 @@ public class ChatService {
                 .nextCursor(nextCursor)
                 .build();
     }
+
+    public void sendMessage(Long senderId, Long roomId, String content) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        boolean isUserA = room.getUserA().getId().equals(senderId);
+        if (!isUserA && !room.getUserB().getId().equals(senderId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+        if (room.getStatus() != ChatRoomStatus.ACTIVE) {
+            throw new IllegalArgumentException("메시지를 보낼 수 없는 채팅방입니다.");
+        }
+        if (room.getMessageCount() >= 150) {
+            throw new IllegalArgumentException("메시지 한도에 도달했습니다.");
+        }
+
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
+                .room(room)
+                .sender(sender)
+                .content(content)
+                .build());
+
+        room.incrementMessageCount();
+
+        NewMessageEvent newMessageEvent = NewMessageEvent.builder()
+                .roomId(roomId)
+                .message(NewMessageEvent.MessageInfo.builder()
+                        .id(message.getId())
+                        .senderId(senderId)
+                        .content(content)
+                        .sentAt(message.getSentAt())
+                        .build())
+                .messageCount(room.getMessageCount())
+                .build();
+
+        redisPublisher.publish("chat:room:" + roomId, newMessageEvent);
+
+        if (room.getMessageCount() == 150) {
+            choiceReportRepository.save(ChoiceReport.builder().room(room).build());
+            room.updateStatus(ChatRoomStatus.COMPLETED);
+
+            redisPublisher.publish("chat:room:" + roomId,
+                    MessageLimitReachedEvent.builder().roomId(roomId).build());
+        }
+    }
+
 }
