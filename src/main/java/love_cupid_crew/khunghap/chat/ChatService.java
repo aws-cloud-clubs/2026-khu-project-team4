@@ -1,12 +1,14 @@
 package love_cupid_crew.khunghap.chat;
 
 import lombok.RequiredArgsConstructor;
+import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomSummaryResponse;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomRequest;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomResponse;
 import love_cupid_crew.khunghap.chat.entity.ChatMessage;
 import love_cupid_crew.khunghap.chat.entity.ChatRoom;
 import love_cupid_crew.khunghap.chat.entity.ChoiceReport;
+import love_cupid_crew.khunghap.chat.enums.UserChoice;
 import love_cupid_crew.khunghap.chat.repository.ChatMessageRepository;
 import love_cupid_crew.khunghap.chat.repository.ChatRoomRepository;
 import love_cupid_crew.khunghap.chat.repository.ChoiceReportRepository;
@@ -69,6 +71,50 @@ public class ChatService {
                 .status(chatRoom.getStatus().name())
                 .compatibilityReport(compatibilityReport)
                 .remainingCoins(coinBalance.getBalance())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ChatRoomDetailResponse getChatRoomDetail(Long currentUserId, Long roomId) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        boolean isUserA = room.getUserA().getId().equals(currentUserId);
+        if (!isUserA && !room.getUserB().getId().equals(currentUserId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+        User targetUser = isUserA ? room.getUserB() : room.getUserA();
+
+        String compatibilityReport = matchCandidateRepository
+                .findByUser_IdAndCandidate_Id(currentUserId, targetUser.getId())
+                .map(mc -> mc.getOhengRelation())
+                .orElse(null);
+
+        String choiceStatus = null;
+        boolean myChoiceSubmitted = false;
+        if (room.getMessageCount() >= 150) {
+            ChoiceReport choiceReport = choiceReportRepository.findByRoom_Id(roomId).orElse(null);
+            if (choiceReport != null) {
+                choiceStatus = choiceReport.getResult().name();
+                UserChoice myChoice = isUserA ? choiceReport.getUserAChoice() : choiceReport.getUserBChoice();
+                myChoiceSubmitted = myChoice != UserChoice.WAITING;
+            }
+        }
+
+        return ChatRoomDetailResponse.builder()
+                .roomId(room.getId())
+                .targetUser(ChatRoomDetailResponse.TargetUserInfo.builder()
+                        .userId(targetUser.getId())
+                        .nickname(targetUser.getNickname())
+                        .iljuAnimal(targetUser.getIljuAnimal() != null ? targetUser.getIljuAnimal().getName() : null)
+                        .build())
+                .messageCount(room.getMessageCount())
+                .status(room.getStatus().name())
+                .compatibilityReport(compatibilityReport)
+                .choiceStatus(choiceStatus)
+                .myChoiceSubmitted(myChoiceSubmitted)
+                .createdAt(room.getCreatedAt())
                 .build();
     }
 

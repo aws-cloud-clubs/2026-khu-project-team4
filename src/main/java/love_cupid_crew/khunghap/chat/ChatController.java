@@ -2,6 +2,7 @@ package love_cupid_crew.khunghap.chat;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomSummaryResponse;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomRequest;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomResponse;
@@ -32,5 +33,12 @@ public class ChatController {
     public ResponseEntity<List<ChatRoomSummaryResponse>> getChatRooms(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok(chatService.getChatRooms(userDetails.getUserId()));
+    }
+
+    @GetMapping("/{roomId}")
+    public ResponseEntity<ChatRoomDetailResponse> getChatRoomDetail(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long roomId) {
+        return ResponseEntity.ok(chatService.getChatRoomDetail(userDetails.getUserId(), roomId));
     }
 }
