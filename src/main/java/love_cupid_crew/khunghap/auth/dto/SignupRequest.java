@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import love_cupid_crew.khunghap.user.enums.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -79,6 +80,8 @@ public class SignupRequest {
         private DrinkingHabit drinking;
         @NotNull
         private SmokingHabit smoking;
+        @NotNull
+        private ExerciseHabit exercise;
     }
 
     @Getter
@@ -103,8 +106,6 @@ public class SignupRequest {
         private Short heightMin;
         @JsonProperty("height_max")
         private Short heightMax;
-        @JsonProperty("same_college_excluded")
-        private boolean sameCollegeExcluded;
     }
 
     @Getter

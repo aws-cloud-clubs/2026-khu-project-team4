@@ -150,6 +150,7 @@ public class SignupService {
                 .mbti(req.getMbti())
                 .drinking(req.getDrinking())
                 .smoking(req.getSmoking())
+                .exercise(req.getExercise())
                 .build());
     }
 
@@ -171,7 +172,6 @@ public class SignupService {
                 .ageMax(req.getAgeMax())
                 .heightMin(req.getHeightMin())
                 .heightMax(req.getHeightMax())
-                .sameCollegeExcluded(req.isSameCollegeExcluded())
                 .build());
     }
 
