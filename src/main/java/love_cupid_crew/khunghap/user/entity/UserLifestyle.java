@@ -39,4 +39,16 @@ public class UserLifestyle {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ExerciseHabit exercise;
+
+    // ===== 업데이트 헬퍼 메서드 (JPA 더티체킹용) =====
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void update(String emojiIntro, String mbti, DrinkingHabit drinking, SmokingHabit smoking) {
+        this.emojiIntro = emojiIntro;
+        this.mbti = mbti;
+        this.drinking = drinking;
+        this.smoking = smoking;
+    }
 }

@@ -21,4 +21,13 @@ public class UserHobby {
 
     @Column(nullable = false, length = 30)
     private String hobby;
+
+    // ===== 업데이트 헬퍼 메서드 =====
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
 }

@@ -24,4 +24,17 @@ public class UserPhoto {
 
     @Column(nullable = false)
     private Short displayOrder;
+
+    // ===== 업데이트 헬퍼 메서드 =====
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setDisplayOrder(Short displayOrder) {
+        this.displayOrder = displayOrder;
+    }
 }
