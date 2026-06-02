@@ -42,6 +42,14 @@ public class ChatRoom {
     @Column
     private OffsetDateTime expiresAt;
 
+    public void updateStatus(ChatRoomStatus status) {
+        this.status = status;
+    }
+
+    public void incrementMessageCount() {
+        this.messageCount++;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = OffsetDateTime.now();

@@ -28,6 +28,13 @@ public class CoinBalance {
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
 
+    public void deduct(int amount) {
+        if (this.balance < amount) {
+            throw new IllegalArgumentException("코인이 부족합니다.");
+        }
+        this.balance -= amount;
+    }
+
     @PrePersist
     @PreUpdate
     protected void onUpdate() {

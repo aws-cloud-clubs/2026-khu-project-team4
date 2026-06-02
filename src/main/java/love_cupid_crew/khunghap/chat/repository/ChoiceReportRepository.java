@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChoiceReportRepository extends JpaRepository<ChoiceReport, Long> {
-
+    Optional<ChoiceReport> findByRoom_Id(Long roomId);
+  
     @Query("""
             SELECT cr FROM ChoiceReport cr
             JOIN FETCH cr.room r

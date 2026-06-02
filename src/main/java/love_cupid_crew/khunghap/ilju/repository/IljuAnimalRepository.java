@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface IljuAnimalRepository extends JpaRepository<IljuAnimal, Long> {
+    Optional<IljuAnimal> findByName(String name);
     Optional<IljuAnimal> findByCheonganAndJiji(String cheongan, String jiji);
 }

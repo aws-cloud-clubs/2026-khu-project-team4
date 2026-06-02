@@ -44,4 +44,8 @@ public class IljuAnimal {
 
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
