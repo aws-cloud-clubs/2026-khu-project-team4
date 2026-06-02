@@ -1,6 +1,7 @@
 package love_cupid_crew.khunghap.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import love_cupid_crew.khunghap.auth.dto.*;
 import love_cupid_crew.khunghap.global.jwt.JwtProvider;
 import love_cupid_crew.khunghap.global.s3.S3Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SignupService {
@@ -35,6 +37,7 @@ public class SignupService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate redisTemplate;
+    private final org.springframework.context.ApplicationEventPublisher eventPublisher;
 
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
@@ -89,6 +92,10 @@ public class SignupService {
         savePhotos(user, request.getPhotos());
         saveCoinBalance(user);
 
+        consumeVerifiedToken(request.getVerifiedToken());
+        eventPublisher.publishEvent(new love_cupid_crew.khunghap.match.UserSignedUpEvent(user.getId()));
+        log.info("회원가입 완료: userId={}, email={}, iljuAnimal={}", user.getId(), email, iljuAnimal.getName());
+
         String accessToken  = jwtProvider.generateAccessToken(CustomUserDetails.from(user));
         String refreshToken = jwtProvider.generateRefreshToken(user.getId());
         redisTemplate.opsForValue()
@@ -113,11 +120,14 @@ public class SignupService {
             throw new IllegalArgumentException("유효하지 않은 인증 토큰입니다.");
         }
         String email = jwtProvider.getEmailFromToken(token);
-        String key = VERIFIED_PREFIX + email;
-        if (!Boolean.TRUE.equals(redisTemplate.hasKey(key))) {
+        if (!Boolean.TRUE.equals(redisTemplate.hasKey(VERIFIED_PREFIX + email))) {
             throw new IllegalArgumentException("이메일 인증이 만료되었습니다. 다시 인증해 주세요.");
         }
-        redisTemplate.delete(key);
+    }
+
+    private void consumeVerifiedToken(String token) {
+        String email = jwtProvider.getEmailFromToken(token);
+        redisTemplate.delete(VERIFIED_PREFIX + email);
     }
 
     private void validateTerms(SignupRequest.TermsRequest terms) {
@@ -150,6 +160,7 @@ public class SignupService {
                 .mbti(req.getMbti())
                 .drinking(req.getDrinking())
                 .smoking(req.getSmoking())
+                .exercise(req.getExercise())
                 .build());
     }
 
@@ -171,7 +182,6 @@ public class SignupService {
                 .ageMax(req.getAgeMax())
                 .heightMin(req.getHeightMin())
                 .heightMax(req.getHeightMax())
-                .sameCollegeExcluded(req.isSameCollegeExcluded())
                 .build());
     }
 

@@ -50,7 +50,4 @@ public class UserDatingStyle {
 
     @Column
     private Short heightMax;
-
-    @Column
-    private boolean sameCollegeExcluded;
 }
