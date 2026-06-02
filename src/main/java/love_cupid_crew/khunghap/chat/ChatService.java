@@ -258,7 +258,7 @@ public class ChatService {
         ChatRoom room = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
 
-        boolean isUserA = room.getUserA().getId()equals(c.urrentUserId);
+        boolean isUserA = room.getUserA().getId().equals(currentUserId);
         if (!isUserA && !room.getUserB().getId().equals(currentUserId)) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }

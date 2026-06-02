@@ -28,11 +28,19 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
-            RedisSubscriber redisSubscriber,
-            ChoiceExpiryListener choiceExpiryListener) {
+            RedisSubscriber redisSubscriber) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener(redisSubscriber, new PatternTopic("chat:room:*"));
+        return container;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer keyspaceListenerContainer(
+            RedisConnectionFactory connectionFactory,
+            ChoiceExpiryListener choiceExpiryListener) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
         container.addMessageListener(choiceExpiryListener, new PatternTopic("__keyevent@*__:expired"));
         return container;
     }
