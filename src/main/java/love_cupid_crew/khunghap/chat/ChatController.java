@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomSummaryResponse;
+import love_cupid_crew.khunghap.chat.dto.ChoiceRequest;
+import love_cupid_crew.khunghap.chat.dto.ChoiceResponse;
 import love_cupid_crew.khunghap.chat.dto.MessageListResponse;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomRequest;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomResponse;
@@ -50,5 +52,13 @@ public class ChatController {
             @RequestParam(required = false) Long before,
             @RequestParam(defaultValue = "15") int size) {
         return ResponseEntity.ok(chatService.getMessages(userDetails.getUserId(), roomId, before, size));
+    }
+
+    @PostMapping("/{roomId}/choice")
+    public ResponseEntity<ChoiceResponse> submitChoice(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long roomId,
+            @Valid @RequestBody ChoiceRequest request) {
+        return ResponseEntity.ok(chatService.submitChoice(userDetails.getUserId(), roomId, request));
     }
 }

@@ -53,6 +53,21 @@ public class ChoiceReport {
     @Column
     private OffsetDateTime resolvedAt;
 
+    public void submitUserAChoice(UserChoice choice, String lastMessage) {
+        this.userAChoice = choice;
+        this.userALastMessage = lastMessage;
+    }
+
+    public void submitUserBChoice(UserChoice choice, String lastMessage) {
+        this.userBChoice = choice;
+        this.userBLastMessage = lastMessage;
+    }
+
+    public void resolve(ChoiceReportStatus result) {
+        this.result = result;
+        this.resolvedAt = OffsetDateTime.now();
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = OffsetDateTime.now();

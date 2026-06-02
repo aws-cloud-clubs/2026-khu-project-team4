@@ -2,6 +2,9 @@ package love_cupid_crew.khunghap.chat;
 
 import lombok.RequiredArgsConstructor;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
+import love_cupid_crew.khunghap.chat.dto.ChoiceRequest;
+import love_cupid_crew.khunghap.chat.dto.ChoiceRespondedEvent;
+import love_cupid_crew.khunghap.chat.dto.ChoiceResponse;
 import love_cupid_crew.khunghap.chat.dto.MessageLimitReachedEvent;
 import love_cupid_crew.khunghap.chat.dto.MessageListResponse;
 import love_cupid_crew.khunghap.chat.dto.NewMessageEvent;
@@ -15,6 +18,7 @@ import love_cupid_crew.khunghap.chat.enums.ChatRoomStatus;
 import love_cupid_crew.khunghap.chat.enums.ChoiceReportStatus;
 import love_cupid_crew.khunghap.chat.enums.UserChoice;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import love_cupid_crew.khunghap.chat.repository.ChatMessageRepository;
 import love_cupid_crew.khunghap.chat.repository.ChatRoomRepository;
 import love_cupid_crew.khunghap.chat.repository.ChoiceReportRepository;
@@ -26,6 +30,7 @@ import love_cupid_crew.khunghap.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,6 +46,7 @@ public class ChatService {
     private final UserRepository userRepository;
     private final MatchCandidateRepository matchCandidateRepository;
     private final RedisPublisher redisPublisher;
+    private final StringRedisTemplate stringRedisTemplate;
 
     public CreateChatRoomResponse createChatRoom(Long currentUserId, CreateChatRoomRequest request) {
         Long targetUserId = request.getTargetUserId();
@@ -241,10 +247,70 @@ public class ChatService {
         if (room.getMessageCount() == 150) {
             choiceReportRepository.save(ChoiceReport.builder().room(room).build());
             room.updateStatus(ChatRoomStatus.COMPLETED);
+            stringRedisTemplate.opsForValue().set("choice:expire:" + roomId, "1", Duration.ofHours(24));
 
             redisPublisher.publish("chat:room:" + roomId,
                     MessageLimitReachedEvent.builder().roomId(roomId).build());
         }
     }
 
+    public ChoiceResponse submitChoice(Long currentUserId, Long roomId, ChoiceRequest request) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        boolean isUserA = room.getUserA().getId()equals(c.urrentUserId);
+        if (!isUserA && !room.getUserB().getId().equals(currentUserId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+        if (room.getMessageCount() < 150) {
+            throw new IllegalArgumentException("아직 선택을 제출할 수 없습니다.");
+        }
+
+        ChoiceReport choiceReport = choiceReportRepository.findByRoom_Id(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("선택 정보를 찾을 수 없습니다."));
+
+        UserChoice myCurrentChoice = isUserA ? choiceReport.getUserAChoice() : choiceReport.getUserBChoice();
+        if (myCurrentChoice != UserChoice.WAITING) {
+            throw new IllegalArgumentException("이미 선택을 제출했습니다.");
+        }
+
+        UserChoice choice = request.getChoice();
+        if (isUserA) {
+            choiceReport.submitUserAChoice(choice, request.getLastMessage());
+        } else {
+            choiceReport.submitUserBChoice(choice, request.getLastMessage());
+        }
+
+        UserChoice userAChoice = choiceReport.getUserAChoice();
+        UserChoice userBChoice = choiceReport.getUserBChoice();
+
+        boolean bothSubmitted = userAChoice != UserChoice.WAITING && userBChoice != UserChoice.WAITING;
+        if (bothSubmitted) {
+            ChoiceReportStatus result = (userAChoice == UserChoice.YES && userBChoice == UserChoice.YES)
+                    ? ChoiceReportStatus.REVEALED
+                    : ChoiceReportStatus.REJECTED;
+            choiceReport.resolve(result);
+            room.updateStatus(ChatRoomStatus.EXPIRED);
+
+            redisPublisher.publish("chat:room:" + roomId,
+                    ChoiceRespondedEvent.builder().roomId(roomId).build());
+        }
+
+        return ChoiceResponse.builder()
+                .choice(choice.name())
+                .result(choiceReport.getResult().name())
+                .myChoiceSubmitted(true)
+                .build();
+    }
+
+    public void handleChoiceExpiry(Long roomId) {
+        choiceReportRepository.findByRoom_Id(roomId).ifPresent(report -> {
+            if (report.getResult() == ChoiceReportStatus.WAITING) {
+                report.resolve(ChoiceReportStatus.REJECTED);
+                report.getRoom().updateStatus(ChatRoomStatus.EXPIRED);
+                redisPublisher.publish("chat:room:" + roomId,
+                        ChoiceRespondedEvent.builder().roomId(roomId).build());
+            }
+        });
+    }
 }
