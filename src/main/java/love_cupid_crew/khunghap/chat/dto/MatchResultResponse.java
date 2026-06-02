@@ -3,8 +3,8 @@ package love_cupid_crew.khunghap.chat.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-import love_cupid_crew.khunghap.chat.entity.ChoiceReport;
 import love_cupid_crew.khunghap.chat.entity.ChatRoom;
+import love_cupid_crew.khunghap.chat.entity.ChoiceReport;
 import love_cupid_crew.khunghap.user.entity.User;
 
 @Getter
