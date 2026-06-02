@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ChoiceReportRepository extends JpaRepository<ChoiceReport, Long> {
     Optional<ChoiceReport> findByRoom_Id(Long roomId);
-  
+
     @Query("""
             SELECT cr FROM ChoiceReport cr
             JOIN FETCH cr.room r
@@ -19,4 +19,13 @@ public interface ChoiceReportRepository extends JpaRepository<ChoiceReport, Long
             WHERE ua.id = :myId OR ub.id = :myId
             """)
     List<ChoiceReport> findAllByUserId(@Param("myId") Long myId);
+
+    @Query("""
+            SELECT cr FROM ChoiceReport cr
+            JOIN FETCH cr.room r
+            JOIN FETCH r.userA ua JOIN FETCH ua.iljuAnimal
+            JOIN FETCH r.userB ub JOIN FETCH ub.iljuAnimal
+            WHERE r.id = :roomId
+            """)
+    Optional<ChoiceReport> findByRoomId(@Param("roomId") Long roomId);
 }
