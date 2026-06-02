@@ -2,6 +2,7 @@ package love_cupid_crew.khunghap.chat;
 
 import lombok.RequiredArgsConstructor;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomDetailResponse;
+import love_cupid_crew.khunghap.chat.dto.MessageListResponse;
 import love_cupid_crew.khunghap.chat.dto.ChatRoomSummaryResponse;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomRequest;
 import love_cupid_crew.khunghap.chat.dto.CreateChatRoomResponse;
@@ -9,6 +10,7 @@ import love_cupid_crew.khunghap.chat.entity.ChatMessage;
 import love_cupid_crew.khunghap.chat.entity.ChatRoom;
 import love_cupid_crew.khunghap.chat.entity.ChoiceReport;
 import love_cupid_crew.khunghap.chat.enums.UserChoice;
+import org.springframework.data.domain.PageRequest;
 import love_cupid_crew.khunghap.chat.repository.ChatMessageRepository;
 import love_cupid_crew.khunghap.chat.repository.ChatRoomRepository;
 import love_cupid_crew.khunghap.chat.repository.ChoiceReportRepository;
@@ -20,6 +22,7 @@ import love_cupid_crew.khunghap.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -152,5 +155,42 @@ public class ChatService {
                             .build();
                 })
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public MessageListResponse getMessages(Long currentUserId, Long roomId, Long before, int size) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        if (!room.getUserA().getId().equals(currentUserId) && !room.getUserB().getId().equals(currentUserId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+        PageRequest pageable = PageRequest.of(0, size + 1);
+        List<ChatMessage> messages = before == null
+                ? chatMessageRepository.findByRoom_IdOrderByIdDesc(roomId, pageable)
+                : chatMessageRepository.findByRoom_IdAndIdLessThanOrderByIdDesc(roomId, before, pageable);
+
+        boolean hasMore = messages.size() > size;
+        if (hasMore) messages = messages.subList(0, size);
+
+        Collections.reverse(messages);
+
+        Long nextCursor = hasMore ? messages.get(0).getId() : null;
+
+        List<MessageListResponse.MessageInfo> messageInfos = messages.stream()
+                .map(m -> MessageListResponse.MessageInfo.builder()
+                        .id(m.getId())
+                        .senderId(m.getSender().getId())
+                        .content(m.getContent())
+                        .sentAt(m.getSentAt())
+                        .build())
+                .toList();
+
+        return MessageListResponse.builder()
+                .messages(messageInfos)
+                .hasMore(hasMore)
+                .nextCursor(nextCursor)
+                .build();
     }
 }
