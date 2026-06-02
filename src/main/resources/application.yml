@@ -41,7 +41,16 @@ jwt:
   secret: ${JWT_SECRET}
   access-expiration: ${JWT_ACCESS_EXPIRATION:900000}        # 15분 (ms)
   refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}   # 7일 (ms)
-  verified-expiration: ${JWT_VERIFIED_EXPIRATION:600000}    # 10분 (ms)
 
 email:
-  code-expiration: ${EMAIL_CODE_EXPIRATION:180}  # 초
+  code-expiration: ${EMAIL_CODE_EXPIRATION:180}        # 초
+  verified-expiration: ${EMAIL_VERIFIED_EXPIRATION:3600}  # 초 (기본 1시간)
+
+aws:
+  credentials:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+  s3:
+    bucket: ${AWS_BUCKET}
+    region: ${AWS_REGION:ap-northeast-2}
+    presigned-expiration-seconds: ${AWS_S3_PRESIGNED_EXPIRATION:300}

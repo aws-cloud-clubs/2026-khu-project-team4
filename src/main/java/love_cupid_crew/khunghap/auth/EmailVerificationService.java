@@ -22,16 +22,21 @@ public class EmailVerificationService {
     @Value("${email.code-expiration}")
     private long codeExpirationSeconds;
 
-    private static final String REDIS_PREFIX = "email:code:";
+    private static final String CODE_PREFIX     = "email:code:";
+    private static final String VERIFIED_PREFIX = "email:verified:";
+
+    @Value("${email.verified-expiration}")
+    private long verifiedExpirationSeconds;
 
     public void sendCode(String email) {
         String code = generateCode();
-        redisTemplate.opsForValue().set(REDIS_PREFIX + email, code, codeExpirationSeconds, TimeUnit.SECONDS);
+        redisTemplate.delete(VERIFIED_PREFIX + email);
+        redisTemplate.opsForValue().set(CODE_PREFIX + email, code, codeExpirationSeconds, TimeUnit.SECONDS);
         sendEmail(email, code);
     }
 
     public String verifyCode(String email, String code) {
-        String stored = redisTemplate.opsForValue().get(REDIS_PREFIX + email);
+        String stored = redisTemplate.opsForValue().get(CODE_PREFIX + email);
 
         if (stored == null) {
             throw new IllegalArgumentException("인증 코드가 만료되었습니다.");
@@ -40,7 +45,8 @@ public class EmailVerificationService {
             throw new IllegalArgumentException("인증 코드가 일치하지 않습니다.");
         }
 
-        redisTemplate.delete(REDIS_PREFIX + email);
+        redisTemplate.delete(CODE_PREFIX + email);
+        redisTemplate.opsForValue().set(VERIFIED_PREFIX + email, "1", verifiedExpirationSeconds, TimeUnit.SECONDS);
         return jwtProvider.generateVerifiedToken(email);
     }
 
