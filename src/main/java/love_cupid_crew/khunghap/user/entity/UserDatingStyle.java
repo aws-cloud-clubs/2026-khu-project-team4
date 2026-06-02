@@ -50,4 +50,25 @@ public class UserDatingStyle {
 
     @Column
     private Short heightMax;
+
+    @Column
+    private boolean sameCollegeExcluded;
+
+    // ===== 업데이트 헬퍼 메서드 =====
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void update(DatingPurpose purpose, ContactStyle contactStyle, DateStyle dateStyle, PersonalTime personalTime,
+                       Short ageMin, Short ageMax, Short heightMin, Short heightMax, boolean sameCollegeExcluded) {
+        this.purpose = purpose;
+        this.contactStyle = contactStyle;
+        this.dateStyle = dateStyle;
+        this.personalTime = personalTime;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
+        this.heightMin = heightMin;
+        this.heightMax = heightMax;
+        this.sameCollegeExcluded = sameCollegeExcluded;
+    }
 }

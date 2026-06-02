@@ -28,4 +28,17 @@ public class UserPreference {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private PreferenceScore score;
+
+    // ===== 업데이트 헬퍼 메서드 =====
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setCategory(PreferenceCategory category) {
+        this.category = category;
+    }
+
+    public void setScore(PreferenceScore score) {
+        this.score = score;
+    }
 }
