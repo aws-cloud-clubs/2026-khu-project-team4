@@ -3,11 +3,17 @@ package love_cupid_crew.khunghap.auth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import love_cupid_crew.khunghap.auth.dto.LoginRequest;
+import love_cupid_crew.khunghap.auth.dto.LoginResponse;
 import love_cupid_crew.khunghap.auth.dto.RefreshRequest;
 import love_cupid_crew.khunghap.auth.dto.RegisterRequest;
+import love_cupid_crew.khunghap.auth.dto.SendCodeRequest;
 import love_cupid_crew.khunghap.auth.dto.TokenResponse;
+import love_cupid_crew.khunghap.auth.dto.VerifiedTokenResponse;
+import love_cupid_crew.khunghap.auth.dto.VerifyCodeRequest;
+import love_cupid_crew.khunghap.global.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +22,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final EmailVerificationService emailVerificationService;
+
+    @PostMapping("/email/send-code")
+    public ResponseEntity<Void> sendCode(@Valid @RequestBody SendCodeRequest request) {
+        emailVerificationService.sendCode(request.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/email/verify-code")
+    public ResponseEntity<VerifiedTokenResponse> verifyCode(@Valid @RequestBody VerifyCodeRequest request) {
+        String verifiedToken = emailVerificationService.verifyCode(request.getEmail(), request.getCode());
+        return ResponseEntity.ok(new VerifiedTokenResponse(verifiedToken));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
@@ -24,12 +43,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest request) {
         return ResponseEntity.ok(authService.refresh(request.getRefreshToken()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        authService.logout(userDetails.getUserId());
+        return ResponseEntity.ok().build();
     }
 }

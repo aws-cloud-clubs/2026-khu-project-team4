@@ -16,15 +16,18 @@ public class JwtProvider {
     private final SecretKey signingKey;
     private final long accessExpiration;
     private final long refreshExpiration;
+    private final long verifiedExpiration;
 
     public JwtProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.access-expiration}") long accessExpiration,
-            @Value("${jwt.refresh-expiration}") long refreshExpiration
+            @Value("${jwt.refresh-expiration}") long refreshExpiration,
+            @Value("${jwt.verified-expiration}") long verifiedExpiration
     ) {
         this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.accessExpiration = accessExpiration;
         this.refreshExpiration = refreshExpiration;
+        this.verifiedExpiration = verifiedExpiration;
     }
 
     public String generateAccessToken(CustomUserDetails userDetails) {
@@ -46,6 +49,24 @@ public class JwtProvider {
                 .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(signingKey)
                 .compact();
+    }
+
+    public String generateVerifiedToken(String email) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("type", "verified")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + verifiedExpiration))
+                .signWith(signingKey)
+                .compact();
+    }
+
+    public boolean isVerifiedToken(String token) {
+        return "verified".equals(parseClaims(token).get("type", String.class));
+    }
+
+    public String getEmailFromToken(String token) {
+        return parseClaims(token).getSubject();
     }
 
     public boolean validateToken(String token) {

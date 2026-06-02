@@ -23,7 +23,25 @@ spring:
     show-sql: true
 
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
 jwt:
   secret: ${JWT_SECRET}
-  access-expiration: ${JWT_ACCESS_EXPIRATION:900000}      # 15분 (ms). 짧을수록 탈취 피해 감소
-  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}  # 7일 (ms). rotation으로 보완
+  access-expiration: ${JWT_ACCESS_EXPIRATION:900000}        # 15분 (ms)
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}   # 7일 (ms)
+  verified-expiration: ${JWT_VERIFIED_EXPIRATION:600000}    # 10분 (ms)
+
+email:
+  code-expiration: ${EMAIL_CODE_EXPIRATION:180}  # 초
