@@ -18,6 +18,7 @@ public class IljuAnimalDetailResponse {
     private String oheng;
     private String cheongan;
     private String jiji;
+    private String imageUrl;
     private String description;
     private List<String> personality;
     private List<String> strengths;
@@ -53,6 +54,7 @@ public class IljuAnimalDetailResponse {
                 .oheng(target.getOheng())
                 .cheongan(target.getCheongan())
                 .jiji(target.getJiji())
+                .imageUrl(target.getImageUrl())
                 .description(target.getDescription())
                 .personality(target.getPersonality() != null ? Arrays.asList(target.getPersonality()) : List.of())
                 .strengths(target.getStrengths() != null ? Arrays.asList(target.getStrengths()) : List.of())
