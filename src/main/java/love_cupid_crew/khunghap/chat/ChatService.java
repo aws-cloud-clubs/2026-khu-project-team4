@@ -231,6 +231,7 @@ public class ChatService {
                 .build());
 
         room.incrementMessageCount();
+        chatRoomRepository.save(room);
 
         NewMessageEvent newMessageEvent = NewMessageEvent.builder()
                 .roomId(roomId)

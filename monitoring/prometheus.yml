@@ -1,0 +1,107 @@
+# ============================================================
+# Prometheus 스크래핑 설정
+# ============================================================
+# Prometheus는 Pull 방식으로 동작합니다.
+# 즉, 앱이 메트릭을 Prometheus에 보내는 게 아니라
+# Prometheus가 주기적으로 앱의 /actuator/prometheus 엔드포인트를 호출합니다.
+# ============================================================
+
+global:
+  # 기본 스크래핑 주기: 15초마다 모든 타겟에서 메트릭 수집
+  # 너무 짧으면 Spring 앱에 부하, 너무 길면 실시간성 떨어짐
+  scrape_interval: 15s
+
+  # 스크래핑 타임아웃: 10초 내에 응답이 없으면 실패로 처리
+  scrape_timeout: 10s
+
+  # 규칙 평가 주기: alert 규칙을 15초마다 재평가
+  evaluation_interval: 15s
+
+  # 모든 메트릭에 기본으로 붙는 레이블
+  # Grafana에서 여러 환경(dev/prod)을 구분할 때 유용
+  external_labels:
+    monitor: 'khunghap-monitor'
+    environment: 'production'
+
+# ============================================================
+# 알림 규칙 파일 경로 (선택사항)
+# 특정 조건 만족 시 Alertmanager로 알림 전송
+# 예: CPU 90% 초과, 에러율 5% 초과 등
+# ============================================================
+# rule_files:
+#   - "/etc/prometheus/rules/*.yml"
+
+# ============================================================
+# Alertmanager 연동 설정 (선택사항)
+# Slack, 이메일, PagerDuty 등으로 알림 발송
+# ============================================================
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# ============================================================
+# 스크래핑 대상 설정
+# ============================================================
+scrape_configs:
+
+  # ----------------------------------------------------------
+  # Prometheus 자기 자신 모니터링
+  # Prometheus 자체의 메트릭도 수집 (선택사항이지만 권장)
+  # ----------------------------------------------------------
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ----------------------------------------------------------
+  # Spring Boot 앱 메트릭 수집 (핵심)
+  # ----------------------------------------------------------
+  - job_name: 'khunghap-spring-boot'
+
+    # Spring Boot Actuator의 Prometheus 엔드포인트 경로
+    metrics_path: '/actuator/prometheus'
+
+    # 스크래핑 주기 (global 설정 오버라이드 가능)
+    scrape_interval: 15s
+
+    static_configs:
+      - targets:
+          # EC2 단일 서버인 경우
+          # 'host.docker.internal'은 Docker 컨테이너에서 호스트(EC2) 접근 시 사용
+          # Linux EC2에서는 host.docker.internal 대신 실제 private IP 사용
+          # 예: '172.31.xx.xx:8080'
+          - '172.31.37.77:8080'
+
+          # Auto Scaling Group으로 서버가 여러 대일 경우 아래처럼 추가
+          # - '172.31.10.10:8080'
+          # - '172.31.10.11:8080'
+          # - '172.31.10.12:8080'
+
+        # Grafana에서 이 인스턴스를 식별할 레이블
+        labels:
+          instance: 'khunghap-server-1'
+          app: 'khunghap'
+
+    # ----------------------------------------------------------
+    # ALB 뒤에 여러 EC2가 있는 경우 서비스 디스커버리 사용 (선택사항)
+    # EC2 인스턴스가 자동으로 추가/제거될 때 Prometheus도 자동 반영
+    # ----------------------------------------------------------
+    # ec2_sd_configs:
+    #   - region: ap-northeast-2
+    #     port: 8080
+    # relabel_configs:
+    #   - source_labels: [__meta_ec2_tag_Name]
+    #     target_label: instance
+
+  # ----------------------------------------------------------
+  # Node Exporter (선택사항)
+  # EC2 서버의 CPU, 메모리, 디스크, 네트워크 등 시스템 메트릭 수집
+  # EC2에 Node Exporter를 별도로 설치해야 함
+  # 설치: docker run -d -p 9100:9100 prom/node-exporter
+  # ----------------------------------------------------------
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['host.docker.internal:9100']
+  #       labels:
+  #         instance: 'khunghap-ec2'

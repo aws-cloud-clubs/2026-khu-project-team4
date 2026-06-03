@@ -48,6 +48,48 @@ email:
   code-expiration: ${EMAIL_CODE_EXPIRATION:180}        # 초
   verified-expiration: ${EMAIL_VERIFIED_EXPIRATION:3600}  # 초 (기본 1시간)
 
+# === 모니터링 (Actuator + Prometheus) ===
+management:
+  endpoints:
+    web:
+      exposure:
+        # 노출할 actuator 엔드포인트 목록
+        # - prometheus : Prometheus가 스크래핑할 메트릭 엔드포인트 (필수)
+        # - health     : 헬스체크 (ALB 타겟 그룹, 로드밸런서 상태 확인용)
+        # - info       : 앱 버전, 빌드 정보 등
+        # - metrics    : 개별 메트릭 조회 (디버깅용)
+        # - loggers    : 런타임에 로그 레벨 변경 가능 (운영 중 디버깅)
+        # 운영 환경에서는 보안상 prometheus, health만 노출하거나 별도 포트로 분리 권장
+        include: "prometheus,health,info,metrics,loggers"
+    # actuator 전용 포트 분리 (선택사항)
+    # 외부에서 8080으로 API 요청, 내부 모니터링은 9090 포트만 사용하도록 분리 가능
+    # EC2 보안 그룹에서 9090은 Prometheus 서버 IP만 허용하면 보안 강화
+    # 사용하려면 아래 주석 해제
+    # port: 9090
+  endpoint:
+    health:
+      # 헬스체크 상세 정보 노출 여부
+      # always: DB, Redis, 디스크 상태 등 상세 정보 포함 (개발/내부 모니터링용)
+      # never : 단순 UP/DOWN 만 노출 (외부 공개 시 권장)
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      # 모든 메트릭에 application 태그 추가
+      # Grafana에서 여러 앱을 한 Prometheus에 연결할 때 앱 구분에 사용
+      application: ${spring.application.name}
+    distribution:
+      # HTTP 요청 응답시간 백분위수 히스토그램 활성화
+      # Grafana에서 p50, p95, p99 레이턴시 차트 그릴 때 필요
+      percentiles-histogram:
+        http.server.requests: true
+      # 응답시간 SLO(Service Level Objective) 버킷 정의
+      # 50ms, 100ms, 200ms, 500ms, 1s, 2s 초과 요청 수를 카운팅
+      # Grafana 알람 설정 시 "2초 초과 요청이 5% 넘으면 경고" 같은 조건에 활용
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms, 1s, 2s
+
 aws:
   credentials:
     access-key: ${AWS_ACCESS_KEY}

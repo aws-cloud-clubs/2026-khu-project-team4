@@ -31,11 +31,8 @@ public class UserController {
      * GET /api/users/me
      */
     @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getMyProfile(
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        Long currentUserId = userDetails.getUserId();
-        UserProfileResponse profileResponse = userService.getMyProfile(currentUserId);
+    public ResponseEntity<UserProfileResponse> getMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserProfileResponse profileResponse = userService.getMyProfile(userDetails.getUserId());
         return ResponseEntity.ok(profileResponse);
     }
 
@@ -43,9 +40,7 @@ public class UserController {
     public ResponseEntity<UserProfileUpdateResponse> updateMyProfile(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody UserProfileUpdateRequest req) {
-
-        Long currentUserId = userDetails.getUserId();
-        UserProfileUpdateResponse resp = userService.updateProfile(currentUserId, req);
+        UserProfileUpdateResponse resp = userService.updateProfile(userDetails.getUserId(), req);
         return ResponseEntity.ok(resp);
     }
 
@@ -53,9 +48,7 @@ public class UserController {
     public ResponseEntity<UserActiveUpdateResponse> updateMyActiveStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody UserActiveUpdateRequest req) {
-
-        Long currentUserId = userDetails.getUserId();
-        UserActiveUpdateResponse resp = userService.updateActiveStatus(currentUserId, req);
+        UserActiveUpdateResponse resp = userService.updateActiveStatus(userDetails.getUserId(), req);
         return ResponseEntity.ok(resp);
     }
 
@@ -65,7 +58,6 @@ public class UserController {
             @RequestPart(name = "photos", required = false) MultipartFile[] photos,
             @RequestPart(name = "deleteIds", required = false) String deleteIdsJson,
             @RequestPart(name = "displayOrders", required = false) String displayOrdersJson) throws Exception {
-
         Long currentUserId = userDetails.getUserId();
 
         // JSON 문자열 파싱
@@ -83,11 +75,8 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteMyAccount(
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        Long currentUserId = userDetails.getUserId();
-        userService.deleteUser(currentUserId);
+    public ResponseEntity<Void> deleteMyAccount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        userService.deleteUser(userDetails.getUserId());
         return ResponseEntity.noContent().build();
     }
 }
