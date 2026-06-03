@@ -52,18 +52,15 @@ public class ExploreService {
 
     public ExploreProfileDetailResponse getProfileDetail(Long myId, Long targetUserId) {
         User target = userRepository.findById(targetUserId)
-                .filter(User::isActive)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
 
         MatchCandidate mc = matchCandidateRepository
                 .findByUserIdAndCandidateId(myId, targetUserId)
                 .orElse(null);
 
-        UserLifestyle lifestyle = lifestyleRepository.findByUser_Id(targetUserId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
+        UserLifestyle lifestyle = lifestyleRepository.findByUser_Id(targetUserId).orElse(null);
         List<UserHobby> hobbies = hobbyRepository.findByUser_Id(targetUserId);
-        UserDatingStyle datingStyle = datingStyleRepository.findByUser_Id(targetUserId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
+        UserDatingStyle datingStyle = datingStyleRepository.findByUser_Id(targetUserId).orElse(null);
         List<UserPreference> preferences = preferenceRepository.findByUser_Id(targetUserId);
         List<UserPhoto> photos = photoRepository.findByUser_IdOrderByDisplayOrderAsc(targetUserId);
 
