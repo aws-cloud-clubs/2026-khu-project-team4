@@ -26,6 +26,9 @@ public class S3Service {
     @Value("${aws.s3.bucket}")
     private String bucket;
 
+    @Value("${aws.s3.region}")
+    private String region;
+
     @Value("${aws.s3.presigned-expiration-seconds}")
     private int presignedExpirationSeconds;
 
@@ -78,7 +81,7 @@ public class S3Service {
                 .build(),
             RequestBody.fromBytes(file.getBytes())
         );
-        return "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + key;
+        return buildPublicUrl(key);
     }
 
     // temp/{uuid}.jpg → profiles/{userId}/{uuid}.jpg 복사 후 temp 삭제
@@ -98,6 +101,10 @@ public class S3Service {
                 .key(tempKey)
                 .build());
 
-        return profileKey;
+        return buildPublicUrl(profileKey);
+    }
+
+    private String buildPublicUrl(String key) {
+        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
     }
 }
