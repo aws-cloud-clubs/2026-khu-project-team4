@@ -1,5 +1,6 @@
 package love_cupid_crew.khunghap.user.controller;
 
+import love_cupid_crew.khunghap.global.security.CustomUserDetails;
 import love_cupid_crew.khunghap.user.dto.UserProfileResponse;
 import love_cupid_crew.khunghap.user.dto.UserProfileUpdateRequest;
 import love_cupid_crew.khunghap.user.dto.UserProfileUpdateResponse;
@@ -10,6 +11,7 @@ import love_cupid_crew.khunghap.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
@@ -27,40 +29,44 @@ public class UserController {
     /**
      * 현재 로그인한 사용자의 전체 프로필 정보 조회
      * GET /api/users/me
-     *
-     * 현재는 Security 인증 객체 설정 전이므로, 임시로 userId = 1L로 설정
-     * 나중에 @AuthenticationPrincipal을 사용하여 실제 인증된 사용자 ID로 변경
      */
     @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getMyProfile() {
-        // 임시: 현재 로그인한 사용자 ID (나중에 @AuthenticationPrincipal로 변경)
-        Long currentUserId = 1L;
+    public ResponseEntity<UserProfileResponse> getMyProfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        Long currentUserId = userDetails.getUserId();
         UserProfileResponse profileResponse = userService.getMyProfile(currentUserId);
-
         return ResponseEntity.ok(profileResponse);
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserProfileUpdateResponse> updateMyProfile(@Valid @RequestBody UserProfileUpdateRequest req) {
-        Long currentUserId = 1L; // TODO: replace with authenticated user id
+    public ResponseEntity<UserProfileUpdateResponse> updateMyProfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody UserProfileUpdateRequest req) {
+
+        Long currentUserId = userDetails.getUserId();
         UserProfileUpdateResponse resp = userService.updateProfile(currentUserId, req);
         return ResponseEntity.ok(resp);
     }
 
     @PatchMapping("/me/active")
-    public ResponseEntity<UserActiveUpdateResponse> updateMyActiveStatus(@Valid @RequestBody UserActiveUpdateRequest req) {
-        Long currentUserId = 1L; // TODO: replace with authenticated user id
+    public ResponseEntity<UserActiveUpdateResponse> updateMyActiveStatus(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody UserActiveUpdateRequest req) {
+
+        Long currentUserId = userDetails.getUserId();
         UserActiveUpdateResponse resp = userService.updateActiveStatus(currentUserId, req);
         return ResponseEntity.ok(resp);
     }
 
     @PutMapping(value = "/me/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserPhotoUpdateResponse> updateMyPhotos(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestPart(name = "photos", required = false) MultipartFile[] photos,
             @RequestPart(name = "deleteIds", required = false) String deleteIdsJson,
             @RequestPart(name = "displayOrders", required = false) String displayOrdersJson) throws Exception {
-        Long currentUserId = 1L; // TODO: replace with authenticated user id
+
+        Long currentUserId = userDetails.getUserId();
 
         // JSON 문자열 파싱
         ObjectMapper objectMapper = new ObjectMapper();
@@ -77,8 +83,10 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteMyAccount() {
-        Long currentUserId = 1L; // TODO: replace with authenticated user id
+    public ResponseEntity<Void> deleteMyAccount(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long currentUserId = userDetails.getUserId();
         userService.deleteUser(currentUserId);
         return ResponseEntity.noContent().build();
     }
