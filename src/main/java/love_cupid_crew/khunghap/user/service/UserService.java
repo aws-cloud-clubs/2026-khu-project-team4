@@ -113,6 +113,7 @@ public class UserService {
         return UserProfileResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .phone(user.getPhone())
                 .nickname(user.getNickname())
                 .birthDate(birthDate)
                 .gender(user.getGender())
