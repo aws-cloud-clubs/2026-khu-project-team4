@@ -55,10 +55,10 @@ public class S3Service {
         }
     }
 
-    // temp/{uuid}.jpg → profiles/{uuid}.jpg 복사 후 temp 삭제
-    public String copyToProfiles(String tempKey) {
+    // temp/{uuid}.jpg → profiles/{userId}/{uuid}.jpg 복사 후 temp 삭제
+    public String copyToProfiles(String tempKey, Long userId) {
         String filename   = tempKey.substring(TEMP_PREFIX.length());
-        String profileKey = PROFILES_PREFIX + filename;
+        String profileKey = PROFILES_PREFIX + userId + "/" + filename;
 
         s3Client.copyObject(CopyObjectRequest.builder()
                 .sourceBucket(bucket)
