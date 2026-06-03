@@ -61,10 +61,10 @@ public class UserDatingStyle {
 
     public void update(DatingPurpose purpose, ContactStyle contactStyle, DateStyle dateStyle, PersonalTime personalTime,
                        Short ageMin, Short ageMax, Short heightMin, Short heightMax, boolean sameCollegeExcluded) {
-        this.purpose = purpose;
-        this.contactStyle = contactStyle;
-        this.dateStyle = dateStyle;
-        this.personalTime = personalTime;
+        if (purpose != null) this.purpose = purpose;
+        if (contactStyle != null) this.contactStyle = contactStyle;
+        if (dateStyle != null) this.dateStyle = dateStyle;
+        if (personalTime != null) this.personalTime = personalTime;
         this.ageMin = ageMin;
         this.ageMax = ageMax;
         this.heightMin = heightMin;
