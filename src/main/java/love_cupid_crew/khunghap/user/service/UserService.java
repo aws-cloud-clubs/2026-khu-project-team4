@@ -1,5 +1,6 @@
 package love_cupid_crew.khunghap.user.service;
 
+import love_cupid_crew.khunghap.global.s3.S3Service;
 import love_cupid_crew.khunghap.user.dto.*;
 import love_cupid_crew.khunghap.user.entity.*;
 import love_cupid_crew.khunghap.user.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final DummyPhotoService dummyPhotoService;
+    private final S3Service s3Service;
 
     /**
      * 사용자 ID로 전체 프로필 정보를 조회하고 DTO로 변환하여 반환
@@ -264,12 +266,9 @@ public class UserService {
         // 2. 새 파일 업로드
         java.util.List<UserPhoto> newPhotos = new java.util.ArrayList<>();
         if (photos != null && photos.length > 0) {
-            List<String> uploadedUrls = dummyPhotoService.uploadPhotos(photos);
-
-            // displayOrder가 없으면 1부터 시작
+            // displayOrder가 없으면 기존 사진 최대 order + 1부터 시작
             int order = 1;
             if (displayOrders == null || displayOrders.isEmpty()) {
-                // 기존 사진의 최대 order + 1부터 시작
                 if (user.getUserPhotos() != null && !user.getUserPhotos().isEmpty()) {
                     order = (int) user.getUserPhotos().stream()
                             .map(UserPhoto::getDisplayOrder)
@@ -278,14 +277,23 @@ public class UserService {
                 }
             }
 
-            // 3. 새 UserPhoto 엔티티 생성
-            for (int i = 0; i < uploadedUrls.size(); i++) {
+            // 3. S3 업로드 후 UserPhoto 엔티티 생성
+            for (int i = 0; i < photos.length; i++) {
+                if (photos[i] == null || photos[i].isEmpty()) continue;
+
+                String imageUrl;
+                try {
+                    imageUrl = s3Service.uploadToProfiles(photos[i], userId);
+                } catch (IOException e) {
+                    throw new RuntimeException("사진 업로드에 실패했습니다.", e);
+                }
+
                 Short displayOrder = (displayOrders != null && i < displayOrders.size())
                         ? displayOrders.get(i)
                         : (short) (order + i);
 
                 UserPhoto userPhoto = UserPhoto.builder()
-                        .imageUrl(uploadedUrls.get(i))
+                        .imageUrl(imageUrl)
                         .displayOrder(displayOrder)
                         .build();
                 newPhotos.add(userPhoto);

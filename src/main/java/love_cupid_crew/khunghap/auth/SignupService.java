@@ -198,7 +198,7 @@ public class SignupService {
 
     private void savePhotos(User user, List<SignupRequest.PhotoRequest> photos) {
         for (SignupRequest.PhotoRequest photo : photos) {
-            String profileKey = s3Service.copyToProfiles(photo.getTempKey());
+            String profileKey = s3Service.copyToProfiles(photo.getTempKey(), user.getId());
             userPhotoRepository.save(UserPhoto.builder()
                     .user(user)
                     .imageUrl(profileKey)
