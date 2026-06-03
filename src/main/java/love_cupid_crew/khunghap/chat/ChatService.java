@@ -205,6 +205,7 @@ public class ChatService {
                 .build();
     }
 
+    @Transactional
     public void sendMessage(Long senderId, Long roomId, String content) {
         ChatRoom room = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
