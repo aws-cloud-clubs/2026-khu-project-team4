@@ -19,11 +19,15 @@ public class MatchResultResponse {
     @Getter
     @Builder
     public static class PartnerDto {
+        @JsonProperty("user_id")
+        private Long userId;
         private String nickname;
         @JsonProperty("ilju_animal")
         private String iljuAnimal;
         @JsonProperty("ilju_emoji")
         private String iljuEmoji;
+        @JsonProperty("ilju_image_url")
+        private String iljuImageUrl;
     }
 
     public static MatchResultResponse of(ChoiceReport cr, Long myId) {
@@ -35,9 +39,11 @@ public class MatchResultResponse {
         return MatchResultResponse.builder()
                 .roomId(room.getId())
                 .partner(PartnerDto.builder()
+                        .userId(partner.getId())
                         .nickname(partner.getNickname())
                         .iljuAnimal(partner.getIljuAnimal().getName())
                         .iljuEmoji(partner.getIljuAnimal().getEmoji())
+                        .iljuImageUrl(partner.getIljuAnimal().getImageUrl())
                         .build())
                 .result(cr.getResult().name())
                 .build();
