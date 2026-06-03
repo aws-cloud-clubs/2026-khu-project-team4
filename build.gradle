@@ -24,6 +24,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Prometheus 메트릭 수집기
+	// Spring Actuator가 /actuator/prometheus 엔드포인트를 통해 메트릭을 Prometheus 형식으로 노출
+	// Prometheus가 이 엔드포인트를 주기적으로 스크래핑(pull)하여 시계열 데이터 저장
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16'
