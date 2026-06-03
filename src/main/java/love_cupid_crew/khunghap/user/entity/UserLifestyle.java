@@ -46,9 +46,9 @@ public class UserLifestyle {
     }
 
     public void update(String emojiIntro, String mbti, DrinkingHabit drinking, SmokingHabit smoking) {
-        this.emojiIntro = emojiIntro;
-        this.mbti = mbti;
-        this.drinking = drinking;
-        this.smoking = smoking;
+        if (emojiIntro != null) this.emojiIntro = emojiIntro;
+        if (mbti != null) this.mbti = mbti;
+        if (drinking != null) this.drinking = drinking;
+        if (smoking != null) this.smoking = smoking;
     }
 }
