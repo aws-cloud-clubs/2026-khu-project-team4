@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
@@ -29,6 +30,14 @@ public class S3Service {
     private static final String PROFILES_PREFIX = "profiles/";
 
     public record PresignedPutResult(String presignedUrl, String tempKey) {}
+
+    public String generatePresignedGetUrl(String key) {
+        GetObjectPresignRequest request = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofHours(1))
+                .getObjectRequest(r -> r.bucket(bucket).key(key).build())
+                .build();
+        return s3Presigner.presignGetObject(request).url().toString();
+    }
 
     public PresignedPutResult generatePresignedPutUrl() {
         String tempKey = TEMP_PREFIX + UUID.randomUUID() + ".jpg";
