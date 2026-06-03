@@ -1,6 +1,8 @@
 spring:
   application:
     name: khunghap
+  jackson:
+    time-zone: Asia/Seoul
 
   # === 데이터베이스 연결 ===
   # 접속 정보는 프로젝트 루트의 .env 파일에서 읽어옴 (spring-dotenv)

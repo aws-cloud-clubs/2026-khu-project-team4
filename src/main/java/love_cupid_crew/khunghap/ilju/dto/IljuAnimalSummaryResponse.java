@@ -14,6 +14,7 @@ public class IljuAnimalSummaryResponse {
     private String oheng;
     private String cheongan;
     private String jiji;
+    private String imageUrl;
 
     public static IljuAnimalSummaryResponse from(IljuAnimal animal) {
         return IljuAnimalSummaryResponse.builder()
@@ -23,6 +24,7 @@ public class IljuAnimalSummaryResponse {
                 .oheng(animal.getOheng())
                 .cheongan(animal.getCheongan())
                 .jiji(animal.getJiji())
+                .imageUrl(animal.getImageUrl())
                 .build();
     }
 }
