@@ -3,6 +3,8 @@ package love_cupid_crew.khunghap.global.s3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -10,6 +12,7 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 
@@ -62,6 +65,20 @@ public class S3Service {
         } catch (NoSuchKeyException e) {
             return false;
         }
+    }
+
+    // MultipartFile을 profiles/{userId}/{uuid}.jpg 로 직접 업로드하고 URL 반환
+    public String uploadToProfiles(MultipartFile file, Long userId) throws IOException {
+        String key = PROFILES_PREFIX + userId + "/" + UUID.randomUUID() + ".jpg";
+        s3Client.putObject(
+            PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .contentType("image/jpeg")
+                .build(),
+            RequestBody.fromBytes(file.getBytes())
+        );
+        return "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + key;
     }
 
     // temp/{uuid}.jpg → profiles/{userId}/{uuid}.jpg 복사 후 temp 삭제
